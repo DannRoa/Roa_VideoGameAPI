@@ -6,14 +6,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const errorMessage = document.getElementById("errorMessage");
 
   async function searchGames() {
-    const query = searchInput.value.trim();
+    const query = searchInput ? searchInput.value.trim() : "";
 
-    loading.style.display = "block";
-    errorMessage.style.display = "none";
-    gamesGrid.innerHTML = "";
+    if (loading) loading.style.display = "block";
+    if (errorMessage) errorMessage.style.display = "none";
+    if (gamesGrid) gamesGrid.innerHTML = "";
 
     try {
-t
       const response = await fetch(`/.netlify/functions/games?query=${encodeURIComponent(query)}`);
       const data = await response.json();
 
@@ -28,14 +27,18 @@ t
       renderGames(games);
 
     } catch (err) {
-      errorMessage.textContent = err.message;
-      errorMessage.style.display = "block";
+      if (errorMessage) {
+        errorMessage.textContent = err.message;
+        errorMessage.style.display = "block";
+      }
     } finally {
-      loading.style.display = "none";
+      if (loading) loading.style.display = "none";
     }
   }
 
   function renderGames(games) {
+    if (!gamesGrid) return;
+
     if (!games || games.length === 0) {
       gamesGrid.innerHTML = "<p style='grid-column: 1/-1; text-align: center; color: #9ca3af;'>No games found.</p>";
       return;
@@ -60,7 +63,6 @@ t
       .join("");
   }
 
-
   if (searchBtn) {
     searchBtn.addEventListener("click", searchGames);
   }
@@ -70,7 +72,6 @@ t
       if (e.key === "Enter") searchGames();
     });
   }
-
 
   searchGames();
 });

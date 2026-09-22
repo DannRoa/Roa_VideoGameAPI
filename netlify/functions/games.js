@@ -10,8 +10,7 @@ exports.handler = async function (event) {
     };
   }
 
-
-  const query = event.queryStringParameters.query || "";
+  const query = event.queryStringParameters?.query || "";
 
   const apiUrl = `https://api.gamebrain.co/search-games?api-key=${API_KEY}`;
 
@@ -35,7 +34,9 @@ exports.handler = async function (event) {
     if (!response.ok) {
       return {
         statusCode: response.status,
-        body: JSON.stringify({ error: data.message || data.detail || `GameBrain returned error ${response.status}` }),
+        body: JSON.stringify({ 
+          error: data.message || data.detail || `GameBrain returned error ${response.status}` 
+        }),
       };
     }
 
