@@ -12,21 +12,11 @@ exports.handler = async function (event) {
 
   const query = event.queryStringParameters?.query || "";
 
-  const apiUrl = `https://api.gamebrain.co/search-games?api-key=${API_KEY}`;
-
-  const requestBody = {
-    query: query,
-    sort: "computed_rating",
-    "sort-order": "desc"
-  };
+  const apiUrl = `https://api.gamebrain.co/v1/games?api-key=${API_KEY}&query=${encodeURIComponent(query)}`;
 
   try {
     const response = await fetch(apiUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(requestBody)
+      method: "GET"
     });
 
     const data = await response.json();
