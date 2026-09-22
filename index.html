@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Game Explorer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <h1>🎮 Video Game Explorer</h1>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Search games (e.g. Zelda, Witcher)...">
+      <button id="searchBtn">Search</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <div id="loading" class="status">Searching games...</div>
+    <div id="errorMessage" class="status error" style="display: none;"></div>
+    <div id="gamesGrid" class="games-grid"></div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
