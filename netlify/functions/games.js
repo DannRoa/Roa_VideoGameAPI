@@ -10,14 +10,24 @@ exports.handler = async function (event) {
     };
   }
 
-  const query = event.queryStringParameters.query || "dota";
 
+  const query = event.queryStringParameters.query || "";
 
-  const apiUrl = `https://api.gamebrain.co/games?key=${API_KEY}&search=${encodeURIComponent(query)}`;
+  const apiUrl = `https://api.gamebrain.co/search-games?api-key=${API_KEY}`;
+
+  const requestBody = {
+    query: query,
+    sort: "computed_rating",
+    "sort-order": "desc"
+  };
 
   try {
     const response = await fetch(apiUrl, {
-      method: "GET"
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(requestBody)
     });
 
     const data = await response.json();
@@ -25,7 +35,7 @@ exports.handler = async function (event) {
     if (!response.ok) {
       return {
         statusCode: response.status,
-        body: JSON.stringify({ error: data.detail || `GameBrain returned error ${response.status}` }),
+        body: JSON.stringify({ error: data.message || data.detail || `GameBrain returned error ${response.status}` }),
       };
     }
 
