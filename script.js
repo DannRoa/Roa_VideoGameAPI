@@ -48,14 +48,22 @@ document.addEventListener("DOMContentLoaded", () => {
       .map((game) => {
         const title = game.name || game.title || "Untitled Game";
         const image = game.image || game.cover || game.background_image || "https://via.placeholder.com/300x160?text=No+Image";
-        const rating = game.computed_rating || game.rating || game.score || "N/A";
+        
+        let rating = "N/A";
+        const rawRating = game.computed_rating ?? game.rating ?? game.score;
+
+        if (typeof rawRating === "number" || typeof rawRating === "string") {
+          rating = rawRating;
+        } else if (typeof rawRating === "object" && rawRating !== null) {
+          rating = rawRating.mean || rawRating.value || rawRating.rating || rawRating.score || "N/A";
+        }
 
         return `
           <div class="game-card">
             <img src="${image}" alt="${title}" loading="lazy" />
-            <div style="padding: 1rem;">
+            <div class="game-info">
               <h3>${title}</h3>
-              <p style="color: #9ca3af; margin-top: 0.5rem;">⭐ Rating: ${rating}</p>
+              <p class="rating">⭐ Rating: ${rating}</p>
             </div>
           </div>
         `;
