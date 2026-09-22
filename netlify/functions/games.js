@@ -1,4 +1,4 @@
-
+// netlify/functions/games.js
 
 exports.handler = async function (event) {
   const API_KEY = process.env.GAMEBRAIN_API_KEY;
@@ -10,12 +10,16 @@ exports.handler = async function (event) {
     };
   }
 
-  const query = event.queryStringParameters.query || "mario";
+  const query = event.queryStringParameters.query || "dota";
 
-  const apiUrl = `https://api.gamebrain.co/games?key=${API_KEY}&search=${encodeURIComponent(query)}&page_size=12`;
+
+  const apiUrl = `https://api.gamebrain.co/games?key=${API_KEY}&search=${encodeURIComponent(query)}`;
 
   try {
-    const response = await fetch(apiUrl);
+    const response = await fetch(apiUrl, {
+      method: "GET"
+    });
+
     const data = await response.json();
 
     if (!response.ok) {
@@ -27,7 +31,10 @@ exports.handler = async function (event) {
 
     return {
       statusCode: 200,
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*"
+      },
       body: JSON.stringify(data),
     };
   } catch (error) {
